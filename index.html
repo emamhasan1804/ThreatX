@@ -22,6 +22,9 @@
       background: url("background.jpg") center / cover no-repeat fixed;
       color: white;
       font-family: Arial, sans-serif;
+      min-width: 320px;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
     }
 
     /* ============================================================
@@ -37,6 +40,7 @@
       top: 0;
       height: 100vh;
       overflow: hidden;
+      isolation: isolate;
     }
 
     .grid-overlay {
@@ -65,6 +69,7 @@
 
     .hero-text {
       text-align: center;
+      padding: 0 24px;
     }
 
     .line {
@@ -170,6 +175,10 @@
       letter-spacing: 1px;
       cursor: pointer;
       user-select: none;
+      appearance: none;
+      border: 0;
+      background: transparent;
+      font-family: inherit;
       transition: opacity 0.3s ease;
       animation: fadeIn 1s ease forwards;
     }
@@ -276,11 +285,12 @@
       padding: 9px 18px;
       border-radius: 999px;
       white-space: nowrap;
-      transition: background 0.25s ease, color 0.25s ease;
+      transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
     }
 
     .glass-nav__pill a:hover {
       background: rgba(255, 255, 255, 0.6);
+      transform: translateY(-1px);
     }
 
     .glass-nav__pill a.active {
@@ -321,7 +331,7 @@
       gap: 100px;
       flex-direction: column;
       background-color: #f2e7e2;
-      padding: 90px 80px 0;
+      padding: 120px 80px 48px;
       font-family: "Helvetica Neue", Arial, sans-serif;
       overflow: hidden;
     }
@@ -331,7 +341,7 @@
     }
 
     .wwd {
-      width: 70%;
+      width: min(70%, 960px);
     }
 
     .wwd__label {
@@ -379,6 +389,25 @@
       height: auto;
     }
 
+    .social-links {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: min(80%, 860px);
+      gap: clamp(14px, 4vw, 54px);
+    }
+
+    .social-links img {
+      width: 3rem;
+      height: 3rem;
+      object-fit: contain;
+      transition: transform 0.25s ease;
+    }
+
+    .social-links img:hover {
+      transform: translateY(-5px) scale(1.06);
+    }
+
     @media (max-width: 900px) {
       .main-content {
         padding: 60px 24px 0;
@@ -390,6 +419,10 @@
 
       .wwd__heading {
         font-size: 40px;
+      }
+
+      .social-links {
+        width: min(100%, 620px);
       }
     }
 
@@ -478,6 +511,16 @@
 
     @media (max-width: 600px) {
 
+      .gate-section {
+        height: 165vh;
+      }
+
+      .gate-container #yourWord,
+      .hero-text .word {
+        transform: none !important;
+        margin: 0 !important;
+      }
+
       .content {
         padding: 16px;
       }
@@ -493,21 +536,18 @@
         width: calc(100% - 16px);
         padding: 0 8px;
         gap: 6px;
+        justify-content: center;
       }
 
       .glass-nav__logo {
-        height: 34px;
-        padding: 3px 10px;
-      }
-
-      .glass-nav__logo img {
-        height: 18px;
+        display: none;
       }
 
       .glass-nav__pill {
         height: 40px;
         padding: 4px;
         gap: 0;
+        max-width: 100%;
       }
 
       .glass-nav__pill a {
@@ -537,7 +577,7 @@
       }
 
       .main-content > div:last-child {
-        width: 100% !important;
+        width: 100%;
         justify-content: space-around !important;
         gap: 10px;
       }
@@ -554,6 +594,15 @@
 
       .scroll-arrow {
         font-size: 26px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
       }
     }
 
@@ -730,10 +779,7 @@
       </div>
 
 
-      <div
-        class="scroll-indicator"
-        id="scrollIndicator"
-      >
+      <button class="scroll-indicator" id="scrollIndicator" type="button" aria-label="Scroll to our services">
 
         <span>
           SCROLL
@@ -743,7 +789,7 @@
           ↓
         </div>
 
-      </div>
+      </button>
 
     </div>
 
@@ -792,41 +838,29 @@
     </div>
 
 
-    <div
-      style="
-        display: flex;
-        justify-content: space-between;
-        height: 3rem;
-        width: 80%;
-      "
-    >
+    <div class="social-links" aria-label="Platforms we support">
 
       <img
-        style="height: 3rem; width: 3rem;"
         src="facebook.png"
         alt="facebook logo"
       >
 
       <img
-        style="height: 3rem; width: 3rem;"
         src="instagram.png"
         alt="instagram logo"
       >
 
       <img
-        style="height: 3rem; width: 3rem;"
         src="whatsapp.png"
         alt="whatsapp logo"
       >
 
       <img
-        style="height: 3rem; width: 3rem;"
         src="toktok.png"
         alt="tiktok logo"
       >
 
       <img
-        style="height: 3rem; width: 3rem;"
         src="gmail.png"
         alt="gmail logo"
       >
@@ -879,7 +913,7 @@
     const MAIN_START_GAP = 60;
 
 
-    window.addEventListener("scroll", () => {
+    function updateMotion() {
 
       // ---- Gate open/close progress ----
 
@@ -911,17 +945,16 @@
 
       // "Your" slides toward "Trusted"
 
-      const currentX =
-        YOUR_START_X +
-        (YOUR_END_X - YOUR_START_X) *
-        progress;
+      const isPhone = window.matchMedia("(max-width: 600px)").matches;
+      const currentX = isPhone
+        ? 0
+        : YOUR_START_X +
+          (YOUR_END_X - YOUR_START_X) * progress;
 
 
-      yourWord.style.transform =
-        `translate(
-          ${currentX}px,
-          ${YOUR_FIXED_Y}px
-        )`;
+      yourWord.style.transform = isPhone
+        ? "none"
+        : `translate(${currentX}px, ${YOUR_FIXED_Y}px)`;
 
 
       // Nav fades in once the gate has fully opened
@@ -955,7 +988,11 @@
 
       }
 
-    });
+    }
+
+    window.addEventListener("scroll", updateMotion, { passive: true });
+    window.addEventListener("resize", updateMotion);
+    updateMotion();
 
 
     scrollIndicator.addEventListener(
