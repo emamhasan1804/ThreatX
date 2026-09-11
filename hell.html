@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ThreatX</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* =========================
+           SCROLL GATE SECTION
+           ========================= */
+
+        .gate-section {
+            height: 200vh;
+        }
+
+        .gate-container {
+            position: sticky;
+            top: 0;
+
+            height: 100vh;
+
+            overflow: hidden;
+        }
+
+
+        /* =========================
+           GRID OVERLAY
+           ========================= */
+
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+            background-size: 250px 300px;
+
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 200%);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 200%);
+
+            pointer-events: none;
+
+            z-index: 0;
+        }
+
+
+        /* =========================
+           CONTENT BEHIND THE GATE
+           ========================= */
+
+        .content {
+            position: absolute;
+            inset: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            z-index: 1;
+        }
+
+
+        /* =========================
+           HERO TEXT (shared style)
+           ========================= */
+
+        .hero-text {
+            text-align: center;
+        }
+
+        .line {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+
+            font-family: 'Outfit', Arial, sans-serif;
+            font-weight: 300;
+            font-size: 5rem;
+            color: #f5f1e8;
+
+            line-height: 1.15;
+            letter-spacing: -1px;
+
+            white-space: nowrap;
+        }
+
+        .word {
+            display: inline-block;
+        }
+
+        /* accent word, colored like "apps" in the reference */
+
+        .accent {
+            background: linear-gradient(90deg, #ee5a3c 0%, #4a7fe0 50%, #f5a623 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* "Your" on the gate page — starting position, animated by JS on scroll */
+
+        .gate-container #yourWord {
+            transform: translate(-250px, -75px);
+        }
+
+        @media (max-width: 900px) {
+            .line {
+                font-size: 2.6rem;
+                white-space: normal;
+                flex-wrap: wrap;
+                gap: 0.3em;
+            }
+
+            .gate-container #yourWord {
+                transform: none;
+                margin-right: 20px;
+            }
+        }
+
+
+        /* =========================
+           GATE
+           ========================= */
+
+        .gate {
+            position: absolute;
+            inset: 0;
+
+            display: flex;
+
+            z-index: 10;
+
+            pointer-events: none;
+        }
+
+        .door {
+            width: 50%;
+            height: 100%;
+
+            background: black;
+
+            position: relative;
+
+            overflow: hidden;
+
+            will-change: transform;
+        }
+
+
+        /* =========================
+           LOGO
+           ========================= */
+
+        .door img {
+            position: absolute;
+
+            width: 400px;
+            max-width: 80vw;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+        }
+
+        .left img {
+            left: 100%;
+
+            transform: translate(-50%, -50%);
+        }
+
+        .right img {
+            right: 100%;
+
+            transform: translate(50%, -50%);
+        }
+
+
+        /* =========================
+           SCROLL INDICATOR
+           ========================= */
+
+        .scroll-indicator {
+            position: absolute;
+
+            left: 50%;
+            bottom: 40px;
+
+            transform: translateX(-50%);
+
+            z-index: 20;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            gap: 8px;
+
+            color: white;
+
+            font-size: 11px;
+            font-weight: 500;
+
+            letter-spacing: 1px;
+
+            cursor: pointer;
+
+            user-select: none;
+
+            transition: opacity 0.3s ease;
+        }
+
+        .scroll-indicator:hover {
+            opacity: 0.7;
+        }
+
+
+        /* =========================
+           ARROW
+           ========================= */
+
+        .scroll-arrow {
+            font-size: 30px;
+
+            line-height: 1;
+
+            animation: scrollBounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes scrollBounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateY(10px);
+                opacity: 1;
+            }
+        }
+
+
+        /* =========================
+           FADE IN
+           ========================= */
+
+        @keyframes fadeIn {
+
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .scroll-indicator {
+            animation: fadeIn 1s ease forwards;
+        }
+
+
+        /* =========================
+           MAIN WEBSITE CONTENT
+           ========================= */
+
+        .main-content {
+            height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: #111;
+        }
+
+        /* "Your" on the main page — gap starts open, closes on scroll */
+
+        .main-content #yourWordMain {
+            margin-right: 60px;
+        }
+
+        body {
+            background: url("background.jpg") center / cover no-repeat fixed;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         SCROLL GATE
+         ========================= -->
+
+    <section class="gate-section">
+
+        <div class="gate-container">
+
+
+            <!-- Grid overlay -->
+
+            <div class="grid-overlay"></div>
+
+
+            <!-- Content behind gate -->
+
+            <div class="content">
+
+                <div class="hero-text">
+
+                    <h1 class="line">
+                        <span class="word" id="yourWord">Your</span>
+                        <span style=" transform: translate(-150px, -75px); " class="word">Trusted</span>
+                    </h1>
+
+                    <h1 class="line">
+                        <span style=" transform: translateY( -75px); " class="word"><span style="color: #1877F2;">S</span><span style="background: linear-gradient(45deg, #FEDA75 0%, #FA7E1E 25%, #D62976 50%, #962FBF 75%, #4F5BD5 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">o</span><span style="background: linear-gradient(45deg, #00B2FF 0%, #A033FF 50%, #FF5280 75%, #FF7061 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">c</span><span style="color: #25D366;">i</span><span style="color: #FE2C55;">a</span><span style="color: #FFFFFF;">l</span></span>
+                        <span style=" transform: translate(50px, -75px); " class="word">Media</span>
+                        <span style=" transform: translate(100px, -75px);" class="word">Agency</span>
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <!-- Gate doors -->
+
+            <div class="gate">
+
+                <div class="door left">
+
+                    <img src="logo.jpg" alt="Logo">
+
+                </div>
+
+
+                <div class="door right">
+
+                    <img src="logo.jpg" alt="Logo">
+
+                </div>
+
+            </div>
+
+
+            <!-- Scroll indicator -->
+
+            <div class="scroll-indicator" id="scrollIndicator">
+
+                <span>SCROLL</span>
+
+                <div class="scroll-arrow">
+                    ↓
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         MAIN WEBSITE CONTENT
+         ========================= -->
+
+    <section class="main-content" id="mainContent">
+
+        <div class="hero-text">
+
+            <h1 class="line">
+                <span class="word" id="yourWordMain">Your</span>
+                <span class="word">Trusted</span>
+            </h1>
+
+            <h1 class="line">
+                <span class="word">Social Media</span>
+                <span class="word accent">Agency</span>
+            </h1>
+
+        </div>
+
+    </section>
+
+
+
+    <script>
+
+        const gateSection =
+            document.querySelector(".gate-section");
+
+        const leftDoor =
+            document.querySelector(".left");
+
+        const rightDoor =
+            document.querySelector(".right");
+
+        const scrollIndicator =
+            document.querySelector("#scrollIndicator");
+
+        const mainContent =
+            document.querySelector("#mainContent");
+
+        const yourWordMain =
+            document.querySelector("#yourWordMain");
+
+        const yourWord =
+            document.querySelector("#yourWord");
+
+
+        /* =========================
+           GATE ANIMATION + "YOUR" MOVEMENT
+           ========================= */
+
+        window.addEventListener("scroll", () => {
+
+            const rect =
+                gateSection.getBoundingClientRect();
+
+
+            const scrollDistance =
+                gateSection.offsetHeight -
+                window.innerHeight;
+
+
+            let progress =
+                -rect.top / scrollDistance;
+
+
+            progress =
+                Math.min(
+                    Math.max(progress, 0),
+                    1
+                );
+
+
+            const movement =
+                progress * 100;
+
+
+            leftDoor.style.transform =
+                `translateX(-${movement}%)`;
+
+
+            rightDoor.style.transform =
+                `translateX(${movement}%)`;
+
+
+            /* =========================
+               "YOUR" MOVES CLOSER TO "TRUSTED"
+               but stops at a 50px gap
+               (Trusted sits at -150px,
+               so -200px keeps 50px between them)
+               ========================= */
+
+            const startX = -250;
+            const endX = -200;
+            const fixedY = -75;
+
+            const currentX =
+                startX + (endX - startX) * progress;
+
+            yourWord.style.transform =
+                `translate(${currentX}px, ${fixedY}px)`;
+
+
+            /* =========================
+               "YOUR" GAP CLOSE ON MAIN PAGE
+               Only runs once main-content
+               is in view — tied to its own
+               scroll progress, not the gate.
+               ========================= */
+
+            const mainRect =
+                mainContent.getBoundingClientRect();
+
+
+            let mainProgress =
+                (window.innerHeight - mainRect.top) /
+                window.innerHeight;
+
+            mainProgress =
+                Math.min(
+                    Math.max(mainProgress, 0),
+                    1
+                );
+
+            const startGap = 60; // px
+
+            const gap =
+                startGap * (1 - mainProgress);
+
+            yourWordMain.style.marginRight =
+                `${gap}px`;
+
+        });
+
+
+
+        /* =========================
+           SLOW SMOOTH SCROLL
+           ========================= */
+
+        scrollIndicator.addEventListener(
+            "click",
+            () => {
+
+                const startPosition =
+                    window.scrollY;
+
+
+                const targetPosition =
+                    mainContent.getBoundingClientRect().top +
+                    window.scrollY;
+
+
+                const distance =
+                    targetPosition -
+                    startPosition;
+
+
+                const duration = 500;
+
+
+                let startTime = null;
+
+
+
+                function smoothScroll(currentTime) {
+
+                    if (!startTime) {
+                        startTime = currentTime;
+                    }
+
+
+                    const elapsed =
+                        currentTime -
+                        startTime;
+
+
+                    let progress =
+                        Math.min(
+                            elapsed / duration,
+                            1
+                        );
+
+
+                    progress =
+                        progress < 0.5
+                            ? 2 * progress * progress
+                            : 1 -
+                            Math.pow(
+                                -2 * progress + 2,
+                                2
+                            ) / 2;
+
+
+                    window.scrollTo(
+                        0,
+                        startPosition +
+                        distance * progress
+                    );
+
+
+                    if (progress < 1) {
+
+                        requestAnimationFrame(
+                            smoothScroll
+                        );
+
+                    }
+
+                }
+
+
+                requestAnimationFrame(
+                    smoothScroll
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <filter id="outline" x="0" y="0" width="32" height="32" filterUnits="userSpaceOnUse">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.5" result="expanded"/>
+      <feFlood flood-color="white" result="white"/>
+      <feComposite in="white" in2="expanded" operator="in" result="stroke"/>
+      <feMerge><feMergeNode in="stroke"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <image href="icons8-point-up-24.png" x="4" y="4" width="24" height="24" filter="url(#outline)"/>
+</svg>
