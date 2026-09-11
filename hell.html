@@ -1,615 +1,535 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>ThreatX</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
-
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background: #111;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-
-        /* =========================
-           SCROLL GATE SECTION
-           ========================= */
-
-        .gate-section {
-            height: 200vh;
-        }
-
-        .gate-container {
-            position: sticky;
-            top: 0;
-
-            height: 100vh;
-
-            overflow: hidden;
-        }
-
-
-        /* =========================
-           GRID OVERLAY
-           ========================= */
-
-        .grid-overlay {
-            position: absolute;
-            inset: 0;
-
-            background-image:
-                linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
-            background-size: 250px 300px;
-
-            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 200%);
-            mask-image: radial-gradient(circle at center, black 40%, transparent 200%);
-
-            pointer-events: none;
-
-            z-index: 0;
-        }
-
-
-        /* =========================
-           CONTENT BEHIND THE GATE
-           ========================= */
-
-        .content {
-            position: absolute;
-            inset: 0;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            z-index: 1;
-        }
-
-
-        /* =========================
-           HERO TEXT (shared style)
-           ========================= */
-
-        .hero-text {
-            text-align: center;
-        }
-
-        .line {
-            display: flex;
-            justify-content: center;
-            align-items: baseline;
-
-            font-family: 'Outfit', Arial, sans-serif;
-            font-weight: 300;
-            font-size: 5rem;
-            color: #f5f1e8;
-
-            line-height: 1.15;
-            letter-spacing: -1px;
-
-            white-space: nowrap;
-        }
-
-        .word {
-            display: inline-block;
-        }
-
-        /* accent word, colored like "apps" in the reference */
-
-        .accent {
-            background: linear-gradient(90deg, #ee5a3c 0%, #4a7fe0 50%, #f5a623 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* "Your" on the gate page — starting position, animated by JS on scroll */
-
-        .gate-container #yourWord {
-            transform: translate(-250px, -75px);
-        }
-
-        @media (max-width: 900px) {
-            .line {
-                font-size: 2.6rem;
-                white-space: normal;
-                flex-wrap: wrap;
-                gap: 0.3em;
-            }
-
-            .gate-container #yourWord {
-                transform: none;
-                margin-right: 20px;
-            }
-        }
-
-
-        /* =========================
-           GATE
-           ========================= */
-
-        .gate {
-            position: absolute;
-            inset: 0;
-
-            display: flex;
-
-            z-index: 10;
-
-            pointer-events: none;
-        }
-
-        .door {
-            width: 50%;
-            height: 100%;
-
-            background: black;
-
-            position: relative;
-
-            overflow: hidden;
-
-            will-change: transform;
-        }
-
-
-        /* =========================
-           LOGO
-           ========================= */
-
-        .door img {
-            position: absolute;
-
-            width: 400px;
-            max-width: 80vw;
-
-            top: 50%;
-
-            transform: translateY(-50%);
-        }
-
-        .left img {
-            left: 100%;
-
-            transform: translate(-50%, -50%);
-        }
-
-        .right img {
-            right: 100%;
-
-            transform: translate(50%, -50%);
-        }
-
-
-        /* =========================
-           SCROLL INDICATOR
-           ========================= */
-
-        .scroll-indicator {
-            position: absolute;
-
-            left: 50%;
-            bottom: 40px;
-
-            transform: translateX(-50%);
-
-            z-index: 20;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            gap: 8px;
-
-            color: white;
-
-            font-size: 11px;
-            font-weight: 500;
-
-            letter-spacing: 1px;
-
-            cursor: pointer;
-
-            user-select: none;
-
-            transition: opacity 0.3s ease;
-        }
-
-        .scroll-indicator:hover {
-            opacity: 0.7;
-        }
-
-
-        /* =========================
-           ARROW
-           ========================= */
-
-        .scroll-arrow {
-            font-size: 30px;
-
-            line-height: 1;
-
-            animation: scrollBounce 1.5s ease-in-out infinite;
-        }
-
-        @keyframes scrollBounce {
-
-            0%,
-            100% {
-                transform: translateY(0);
-                opacity: 0.5;
-            }
-
-            50% {
-                transform: translateY(10px);
-                opacity: 1;
-            }
-        }
-
-
-        /* =========================
-           FADE IN
-           ========================= */
-
-        @keyframes fadeIn {
-
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .scroll-indicator {
-            animation: fadeIn 1s ease forwards;
-        }
-
-
-        /* =========================
-           MAIN WEBSITE CONTENT
-           ========================= */
-
-        .main-content {
-            height: 100vh;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            background: #111;
-        }
-
-        /* "Your" on the main page — gap starts open, closes on scroll */
-
-        .main-content #yourWordMain {
-            margin-right: 60px;
-        }
-
-        body {
-            background: url("background.jpg") center / cover no-repeat fixed;
-        }
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThreatX</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: url("background.jpg") center / cover no-repeat fixed;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    /* ============================================================
+       SCROLL GATE SECTION
+       ============================================================ */
+
+    .gate-section {
+      height: 200vh;
+    }
+
+    .gate-container {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+      background-size: 250px 300px;
+      -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 200%);
+      mask-image: radial-gradient(circle at center, black 40%, transparent 200%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    /* ---- Hero text ---- */
+
+    .hero-text {
+      text-align: center;
+    }
+
+    .line {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      font-family: 'Outfit', Arial, sans-serif;
+      font-weight: 300;
+      font-size: 3rem;
+      color: #f5f1e8;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      white-space: nowrap;
+    }
+
+    .word {
+      display: inline-block;
+    }
+
+    /* Accent word, colored like "apps" in the reference */
+    .accent {
+      background: linear-gradient(90deg, #ee5a3c 0%, #4a7fe0 50%, #f5a623 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* "Your" on the gate page — starting position, animated by JS on scroll */
+    .gate-container #yourWord {
+      transform: translate(-250px, -75px);
+    }
+
+    @media (max-width: 900px) {
+      .line {
+        font-size: 2.6rem;
+        white-space: normal;
+        flex-wrap: wrap;
+        gap: 0.3em;
+      }
+
+      .gate-container #yourWord {
+        transform: none;
+        margin-right: 20px;
+      }
+    }
+
+    /* ---- Gate doors ---- */
+
+    .gate {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .door {
+      width: 50%;
+      height: 100%;
+      background: black;
+      position: relative;
+      overflow: hidden;
+      will-change: transform;
+    }
+
+    .door img {
+      position: absolute;
+      top: 50%;
+      width: 400px;
+      max-width: 80vw;
+      transform: translateY(-50%);
+    }
+
+    .left img {
+      left: 100%;
+      transform: translate(-50%, -50%);
+    }
+
+    .right img {
+      right: 100%;
+      transform: translate(50%, -50%);
+    }
+
+    /* ---- Scroll indicator ---- */
+
+    .scroll-indicator {
+      position: absolute;
+      left: 50%;
+      bottom: 40px;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: white;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      cursor: pointer;
+      user-select: none;
+      transition: opacity 0.3s ease;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .scroll-indicator:hover {
+      opacity: 0.7;
+    }
+
+    .scroll-arrow {
+      font-size: 30px;
+      line-height: 1;
+      animation: scrollBounce 1.5s ease-in-out infinite;
+    }
+
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateY(0); opacity: 0.5; }
+      50%      { transform: translateY(10px); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ============================================================
+       GLASS NAV BAR
+       Fixed at the top, fades in once the gate has fully opened,
+       and stays visible over every section below it.
+       ============================================================ */
+
+    .glass-nav {
+      position: fixed;
+      top: 24px;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      opacity: 0;
+      transform: translateY(-16px);
+      pointer-events: none;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .glass-nav.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .glass-nav__logo {
+      display: flex;
+      align-items: center;
+      height: 44px;
+      padding: 6px 18px;
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 999px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .glass-nav__logo img {
+      display: block;
+      height: 22px;
+      width: auto;
+    }
+
+    .glass-nav__pill {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 48px;
+      padding: 6px;
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 999px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .glass-nav__pill a {
+      font-family: 'Outfit', Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #171717;
+      text-decoration: none;
+      padding: 9px 18px;
+      border-radius: 999px;
+      white-space: nowrap;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .glass-nav__pill a:hover {
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .glass-nav__pill a.active {
+      background: #171717;
+      color: #f5efe7;
+    }
+
+    @media (max-width: 900px) {
+      .glass-nav {
+        top: 14px;
+        padding: 0 16px;
+      }
+
+      .glass-nav__pill {
+        gap: 0;
+      }
+
+      .glass-nav__pill a {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      .glass-nav__logo {
+        height: 38px;
+        padding: 4px 12px;
+      }
+    }
+
+    /* ============================================================
+       MAIN WEBSITE CONTENT — "What We Do"
+       ============================================================ */
+
+    .main-content {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 100px;
+      flex-direction: column;
+      background-color: #f2e7e2;
+      padding: 90px 80px 0;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    /* "Your" on the main page — gap starts open, closes on scroll */
+    .main-content #yourWordMain {
+      margin-right: 60px;
+    }
+
+    .wwd {
+      width: 70%;
+    }
+
+    .wwd__label {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #444444;
+      text-transform: uppercase;
+      margin: 0 0 18px;
+    }
+
+    .wwd__heading {
+      margin: 0;
+      font-weight: 400;
+      font-size: 76px;
+      line-height: 1.18;
+      letter-spacing: -0.5px;
+      color: #171717;
+    }
+
+    .wwd__heading .c-red    { color: #c0504d; }
+    .wwd__heading .c-blue   { color: #4a86e8; }
+    .wwd__heading .c-orange { color: #d99a3f; }
+
+    .people-strip {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      margin-top: 60px;
+      line-height: 0;
+    }
+
+    .people-strip__img {
+      display: block;
+      width: 100%;
+      max-width: 950px;
+      height: auto;
+    }
+
+    @media (max-width: 900px) {
+      .main-content {
+        padding: 60px 24px 0;
+      }
+
+      .wwd__heading {
+        font-size: 40px;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+  <!-- ================================================================
+       GLASS NAV BAR
+       Fixed over every section; fades in once the gate has fully opened.
+       ================================================================ -->
+  <nav class="glass-nav" id="glassNav">
+    <div class="glass-nav__logo">
+      <img src="logo.jpg" alt="Logo">
+    </div>
 
-    <!-- =========================
-         SCROLL GATE
-         ========================= -->
+    <div class="glass-nav__pill">
+      <a href="#home" class="active">Home</a>
+      <a href="#services">Services</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#team">Our Team</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
 
-    <section class="gate-section">
+  <!-- ================================================================
+       SCROLL GATE
+       ================================================================ -->
+  <section class="gate-section">
+    <div class="gate-container">
 
-        <div class="gate-container">
+      <div class="grid-overlay"></div>
 
-
-            <!-- Grid overlay -->
-
-            <div class="grid-overlay"></div>
-
-
-            <!-- Content behind gate -->
-
-            <div class="content">
-
-                <div class="hero-text">
-
-                    <h1 class="line">
-                        <span class="word" id="yourWord">Your</span>
-                        <span style=" transform: translate(-150px, -75px); " class="word">Trusted</span>
-                    </h1>
-
-                    <h1 class="line">
-                        <span style=" transform: translateY( -75px); " class="word"><span style="color: #1877F2;">S</span><span style="background: linear-gradient(45deg, #FEDA75 0%, #FA7E1E 25%, #D62976 50%, #962FBF 75%, #4F5BD5 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">o</span><span style="background: linear-gradient(45deg, #00B2FF 0%, #A033FF 50%, #FF5280 75%, #FF7061 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">c</span><span style="color: #25D366;">i</span><span style="color: #FE2C55;">a</span><span style="color: #FFFFFF;">l</span></span>
-                        <span style=" transform: translate(50px, -75px); " class="word">Media</span>
-                        <span style=" transform: translate(100px, -75px);" class="word">Agency</span>
-                    </h1>
-
-                </div>
-
-            </div>
-
-
-            <!-- Gate doors -->
-
-            <div class="gate">
-
-                <div class="door left">
-
-                    <img src="logo.jpg" alt="Logo">
-
-                </div>
-
-
-                <div class="door right">
-
-                    <img src="logo.jpg" alt="Logo">
-
-                </div>
-
-            </div>
-
-
-            <!-- Scroll indicator -->
-
-            <div class="scroll-indicator" id="scrollIndicator">
-
-                <span>SCROLL</span>
-
-                <div class="scroll-arrow">
-                    ↓
-                </div>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =========================
-         MAIN WEBSITE CONTENT
-         ========================= -->
-
-    <section class="main-content" id="mainContent">
-
+      <div class="content">
         <div class="hero-text">
+          <h1 class="line">
+            <span class="word" id="yourWord">Your</span>
+            <span class="word" style="transform: translate(-150px, -75px);">Trusted</span>
+          </h1>
 
-            <h1 class="line">
-                <span class="word" id="yourWordMain">Your</span>
-                <span class="word">Trusted</span>
-            </h1>
-
-            <h1 class="line">
-                <span class="word">Social Media</span>
-                <span class="word accent">Agency</span>
-            </h1>
-
+          <h1 class="line">
+            <span class="word" style="transform: translateY(-75px);">
+              <span style="color: #1877F2;">S</span><span
+                style="background: linear-gradient(45deg, #FEDA75 0%, #FA7E1E 25%, #D62976 50%, #962FBF 75%, #4F5BD5 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">o</span><span
+                style="background: linear-gradient(45deg, #00B2FF 0%, #A033FF 50%, #FF5280 75%, #FF7061 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">c</span><span
+                style="color: #25D366;">i</span><span style="color: #FE2C55;">a</span><span
+                style="color: #FFFFFF;">l</span>
+            </span>
+            <span class="word" style="transform: translate(50px, -75px);">Media</span>
+            <span class="word" style="transform: translate(100px, -75px);">Agency</span>
+          </h1>
         </div>
+      </div>
+
+      <div class="gate">
+        <div class="door left">
+          <img src="logo.jpg" alt="Logo">
+        </div>
+        <div class="door right">
+          <img src="logo.jpg" alt="Logo">
+        </div>
+      </div>
+
+      <div class="scroll-indicator" id="scrollIndicator">
+        <span>SCROLL</span>
+        <div class="scroll-arrow">↓</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================
+       MAIN WEBSITE CONTENT
+       The glass nav above stays fixed and visible through this
+       section and any further sections you add below it.
+       ================================================================ -->
+  <section class="main-content" id="mainContent">
+    <div class="wwd">
+      <p class="wwd__label">What we do</p>
+      <h1 class="wwd__heading">
+        We help you fixing your
+        <span class="c-red">s</span><span class="c-blue">ocial media</span>
+        <span class="c-orange">account</span>
+        <span class="c-blue">Issues</span>
+        with low cost &<span class="c-red">100%</span>precesion
+      </h1>
+    </div>
+    <div style="display: flex; justify-content:space-between;height: 3rem; width: 80%;">
+        <img style="height: 3rem; width: 3rem;" src="facebook.png" alt="facebook logo">
+        <img style="height: 3rem; width: 3rem;" src="instagram.png" alt="instagram logo">
+        <img style="height: 3rem; width: 3rem;" src="whatsapp.png" alt="whatsapp logo">
+        <img style="height: 3rem; width: 3rem;" src="toktok.png" alt="tiktok logo">
+        <img style="height: 3rem; width: 3rem;" src="gmail.png" alt="tiktok logo">
+    </div>
+  </section>
+
+  <script>
+    const gateSection     = document.querySelector(".gate-section");
+    const leftDoor        = document.querySelector(".left");
+    const rightDoor       = document.querySelector(".right");
+    const scrollIndicator = document.querySelector("#scrollIndicator");
+    const mainContent     = document.querySelector("#mainContent");
+    const yourWordMain    = document.querySelector("#yourWordMain");
+    const yourWord        = document.querySelector("#yourWord");
+    const glassNav        = document.querySelector("#glassNav");
+
+    // "Your" position while closed vs. its resting point next to "Trusted"
+    const YOUR_START_X = -250;
+    const YOUR_END_X   = -200;
+    const YOUR_FIXED_Y = -75;
+
+    // How far "Your" sits from "media" before the main section closes the gap
+    const MAIN_START_GAP = 60; // px
+
+    window.addEventListener("scroll", () => {
+      // ---- Gate open/close progress (0 = closed, 1 = fully open) ----
+      const rect = gateSection.getBoundingClientRect();
+      const scrollDistance = gateSection.offsetHeight - window.innerHeight;
+      const progress = clamp(-rect.top / scrollDistance, 0, 1);
+
+      const movement = progress * 100;
+      leftDoor.style.transform  = `translateX(-${movement}%)`;
+      rightDoor.style.transform = `translateX(${movement}%)`;
+
+      // "Your" slides toward "Trusted" as the gate opens
+      const currentX = YOUR_START_X + (YOUR_END_X - YOUR_START_X) * progress;
+      yourWord.style.transform = `translate(${currentX}px, ${YOUR_FIXED_Y}px)`;
+
+      // Nav fades in once the gate has fully opened
+      glassNav.classList.toggle("visible", progress >= 1);
+
+      // ---- "Your" gap close on the main page (its own scroll progress) ----
+      const mainRect = mainContent.getBoundingClientRect();
+      const mainProgress = clamp(
+        (window.innerHeight - mainRect.top) / window.innerHeight,
+        0,
+        1
+      );
+      yourWordMain.style.marginRight = `${MAIN_START_GAP * (1 - mainProgress)}px`;
+    });
+
+    scrollIndicator.addEventListener("click", () => {
+      const startPosition  = window.scrollY;
+      const targetPosition = mainContent.getBoundingClientRect().top + window.scrollY;
+      const distance = targetPosition - startPosition;
+      const duration = 500;
+      let startTime = null;
+
+      function smoothScroll(currentTime) {
+        if (!startTime) startTime = currentTime;
+
+        const elapsed = currentTime - startTime;
+        let t = Math.min(elapsed / duration, 1);
+        t = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // ease-in-out
 
-    </section>
+        window.scrollTo(0, startPosition + distance * t);
 
+        if (t < 1) requestAnimationFrame(smoothScroll);
+      }
 
+      requestAnimationFrame(smoothScroll);
+    });
 
-    <script>
-
-        const gateSection =
-            document.querySelector(".gate-section");
-
-        const leftDoor =
-            document.querySelector(".left");
-
-        const rightDoor =
-            document.querySelector(".right");
-
-        const scrollIndicator =
-            document.querySelector("#scrollIndicator");
-
-        const mainContent =
-            document.querySelector("#mainContent");
-
-        const yourWordMain =
-            document.querySelector("#yourWordMain");
-
-        const yourWord =
-            document.querySelector("#yourWord");
-
-
-        /* =========================
-           GATE ANIMATION + "YOUR" MOVEMENT
-           ========================= */
-
-        window.addEventListener("scroll", () => {
-
-            const rect =
-                gateSection.getBoundingClientRect();
-
-
-            const scrollDistance =
-                gateSection.offsetHeight -
-                window.innerHeight;
-
-
-            let progress =
-                -rect.top / scrollDistance;
-
-
-            progress =
-                Math.min(
-                    Math.max(progress, 0),
-                    1
-                );
-
-
-            const movement =
-                progress * 100;
-
-
-            leftDoor.style.transform =
-                `translateX(-${movement}%)`;
-
-
-            rightDoor.style.transform =
-                `translateX(${movement}%)`;
-
-
-            /* =========================
-               "YOUR" MOVES CLOSER TO "TRUSTED"
-               but stops at a 50px gap
-               (Trusted sits at -150px,
-               so -200px keeps 50px between them)
-               ========================= */
-
-            const startX = -250;
-            const endX = -200;
-            const fixedY = -75;
-
-            const currentX =
-                startX + (endX - startX) * progress;
-
-            yourWord.style.transform =
-                `translate(${currentX}px, ${fixedY}px)`;
-
-
-            /* =========================
-               "YOUR" GAP CLOSE ON MAIN PAGE
-               Only runs once main-content
-               is in view — tied to its own
-               scroll progress, not the gate.
-               ========================= */
-
-            const mainRect =
-                mainContent.getBoundingClientRect();
-
-
-            let mainProgress =
-                (window.innerHeight - mainRect.top) /
-                window.innerHeight;
-
-            mainProgress =
-                Math.min(
-                    Math.max(mainProgress, 0),
-                    1
-                );
-
-            const startGap = 60; // px
-
-            const gap =
-                startGap * (1 - mainProgress);
-
-            yourWordMain.style.marginRight =
-                `${gap}px`;
-
-        });
-
-
-
-        /* =========================
-           SLOW SMOOTH SCROLL
-           ========================= */
-
-        scrollIndicator.addEventListener(
-            "click",
-            () => {
-
-                const startPosition =
-                    window.scrollY;
-
-
-                const targetPosition =
-                    mainContent.getBoundingClientRect().top +
-                    window.scrollY;
-
-
-                const distance =
-                    targetPosition -
-                    startPosition;
-
-
-                const duration = 500;
-
-
-                let startTime = null;
-
-
-
-                function smoothScroll(currentTime) {
-
-                    if (!startTime) {
-                        startTime = currentTime;
-                    }
-
-
-                    const elapsed =
-                        currentTime -
-                        startTime;
-
-
-                    let progress =
-                        Math.min(
-                            elapsed / duration,
-                            1
-                        );
-
-
-                    progress =
-                        progress < 0.5
-                            ? 2 * progress * progress
-                            : 1 -
-                            Math.pow(
-                                -2 * progress + 2,
-                                2
-                            ) / 2;
-
-
-                    window.scrollTo(
-                        0,
-                        startPosition +
-                        distance * progress
-                    );
-
-
-                    if (progress < 1) {
-
-                        requestAnimationFrame(
-                            smoothScroll
-                        );
-
-                    }
-
-                }
-
-
-                requestAnimationFrame(
-                    smoothScroll
-                );
-
-            }
-        );
-
-    </script>
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+  </script>
 
 </body>
-
 </html>
