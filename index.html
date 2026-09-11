@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>ThreatX</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -82,15 +84,19 @@
       display: inline-block;
     }
 
-    /* Accent word, colored like "apps" in the reference */
     .accent {
-      background: linear-gradient(90deg, #ee5a3c 0%, #4a7fe0 50%, #f5a623 100%);
+      background: linear-gradient(
+        90deg,
+        #ee5a3c 0%,
+        #4a7fe0 50%,
+        #f5a623 100%
+      );
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
 
-    /* "Your" on the gate page — starting position, animated by JS on scroll */
+    /* "Your" on the gate page */
     .gate-container #yourWord {
       transform: translate(-250px, -75px);
     }
@@ -179,19 +185,29 @@
     }
 
     @keyframes scrollBounce {
-      0%, 100% { transform: translateY(0); opacity: 0.5; }
-      50%      { transform: translateY(10px); opacity: 1; }
+      0%, 100% {
+        transform: translateY(0);
+        opacity: 0.5;
+      }
+
+      50% {
+        transform: translateY(10px);
+        opacity: 1;
+      }
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
 
     /* ============================================================
        GLASS NAV BAR
-       Fixed at the top, fades in once the gate has fully opened,
-       and stays visible over every section below it.
        ============================================================ */
 
     .glass-nav {
@@ -294,7 +310,7 @@
     }
 
     /* ============================================================
-       MAIN WEBSITE CONTENT — "What We Do"
+       MAIN WEBSITE CONTENT
        ============================================================ */
 
     .main-content {
@@ -310,7 +326,6 @@
       overflow: hidden;
     }
 
-    /* "Your" on the main page — gap starts open, closes on scroll */
     .main-content #yourWordMain {
       margin-right: 60px;
     }
@@ -337,9 +352,17 @@
       color: #171717;
     }
 
-    .wwd__heading .c-red    { color: #c0504d; }
-    .wwd__heading .c-blue   { color: #4a86e8; }
-    .wwd__heading .c-orange { color: #d99a3f; }
+    .wwd__heading .c-red {
+      color: #c0504d;
+    }
+
+    .wwd__heading .c-blue {
+      color: #4a86e8;
+    }
+
+    .wwd__heading .c-orange {
+      color: #d99a3f;
+    }
 
     .people-strip {
       display: flex;
@@ -361,10 +384,205 @@
         padding: 60px 24px 0;
       }
 
+      .wwd {
+        width: 100%;
+      }
+
       .wwd__heading {
         font-size: 40px;
       }
     }
+
+    /* ============================================================
+       RESPONSIVE CSS ONLY
+       Original scrolling/animation behavior is unchanged.
+       ============================================================ */
+
+    @media (max-width: 900px) {
+
+      .content {
+        padding: 20px;
+      }
+
+      .line {
+        font-size: clamp(2rem, 5vw, 2.6rem);
+        white-space: normal;
+        flex-wrap: wrap;
+        gap: 0.25em;
+      }
+
+      .glass-nav {
+        width: calc(100% - 24px);
+        padding: 0 12px;
+        gap: 10px;
+      }
+
+      .glass-nav__logo {
+        flex-shrink: 0;
+        max-width: 180px;
+        height: 38px;
+        padding: 4px 12px;
+      }
+
+      .glass-nav__logo img {
+        max-width: 100%;
+        height: 20px;
+      }
+
+      .glass-nav__pill {
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .glass-nav__pill::-webkit-scrollbar {
+        display: none;
+      }
+
+      .glass-nav__pill a {
+        flex-shrink: 0;
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      .main-content {
+        padding: 60px 24px 30px;
+        gap: 50px;
+      }
+
+      .wwd {
+        width: 100%;
+      }
+
+      .wwd__heading {
+        font-size: clamp(40px, 7vw, 60px);
+      }
+
+      .main-content > div:last-child {
+        width: 90% !important;
+        max-width: 700px;
+        height: auto !important;
+        min-height: 3rem;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .main-content > div:last-child img {
+        width: clamp(2.25rem, 6vw, 3rem) !important;
+        height: clamp(2.25rem, 6vw, 3rem) !important;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .content {
+        padding: 16px;
+      }
+
+      .line {
+        font-size: clamp(1.5rem, 7vw, 2.1rem);
+        line-height: 1.2;
+        gap: 0.15em 0.2em;
+      }
+
+      .glass-nav {
+        top: 10px;
+        width: calc(100% - 16px);
+        padding: 0 8px;
+        gap: 6px;
+      }
+
+      .glass-nav__logo {
+        height: 34px;
+        padding: 3px 10px;
+      }
+
+      .glass-nav__logo img {
+        height: 18px;
+      }
+
+      .glass-nav__pill {
+        height: 40px;
+        padding: 4px;
+        gap: 0;
+      }
+
+      .glass-nav__pill a {
+        font-size: 10px;
+        padding: 7px 8px;
+      }
+
+      .main-content {
+        min-height: 100vh;
+        padding: 70px 20px 30px;
+        gap: 35px;
+      }
+
+      .wwd {
+        width: 100%;
+      }
+
+      .wwd__label {
+        font-size: 12px;
+        margin-bottom: 12px;
+      }
+
+      .wwd__heading {
+        font-size: clamp(2rem, 9.5vw, 3rem);
+        line-height: 1.1;
+        letter-spacing: -1px;
+      }
+
+      .main-content > div:last-child {
+        width: 100% !important;
+        justify-content: space-around !important;
+        gap: 10px;
+      }
+
+      .main-content > div:last-child img {
+        width: clamp(2rem, 10vw, 2.75rem) !important;
+        height: clamp(2rem, 10vw, 2.75rem) !important;
+        object-fit: contain;
+      }
+
+      .scroll-indicator {
+        bottom: 20px;
+      }
+
+      .scroll-arrow {
+        font-size: 26px;
+      }
+    }
+
+    @media (max-width: 380px) {
+
+      .line {
+        font-size: 1.35rem;
+      }
+
+      .glass-nav {
+        width: calc(100% - 10px);
+        padding: 0 5px;
+      }
+
+      .glass-nav__pill a {
+        font-size: 9px;
+        padding: 7px 6px;
+      }
+
+      .wwd__heading {
+        font-size: 1.8rem;
+      }
+
+      .main-content > div:last-child img {
+        width: 2rem !important;
+        height: 2rem !important;
+      }
+    }
+
   </style>
 </head>
 
@@ -372,9 +590,10 @@
 
   <!-- ================================================================
        GLASS NAV BAR
-       Fixed over every section; fades in once the gate has fully opened.
        ================================================================ -->
+
   <nav class="glass-nav" id="glassNav">
+
     <div class="glass-nav__logo">
       <img src="logo.jpg" alt="Logo">
     </div>
@@ -386,150 +605,450 @@
       <a href="#team">Our Team</a>
       <a href="#contact">Contact</a>
     </div>
+
   </nav>
+
 
   <!-- ================================================================
        SCROLL GATE
        ================================================================ -->
+
   <section class="gate-section">
+
     <div class="gate-container">
 
       <div class="grid-overlay"></div>
 
+
       <div class="content">
+
         <div class="hero-text">
-          <h1 class="line">
-            <span class="word" id="yourWord">Your</span>
-            <span class="word" style="transform: translate(-150px, -75px);">Trusted</span>
-          </h1>
 
           <h1 class="line">
-            <span class="word" style="transform: translateY(-75px);">
-              <span style="color: #1877F2;">S</span><span
-                style="background: linear-gradient(45deg, #FEDA75 0%, #FA7E1E 25%, #D62976 50%, #962FBF 75%, #4F5BD5 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">o</span><span
-                style="background: linear-gradient(45deg, #00B2FF 0%, #A033FF 50%, #FF5280 75%, #FF7061 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">c</span><span
-                style="color: #25D366;">i</span><span style="color: #FE2C55;">a</span><span
-                style="color: #FFFFFF;">l</span>
+
+            <span class="word" id="yourWord">
+              Your
             </span>
-            <span class="word" style="transform: translate(50px, -75px);">Media</span>
-            <span class="word" style="transform: translate(100px, -75px);">Agency</span>
+
+            <span
+              class="word"
+              style="transform: translate(-150px, -75px);"
+            >
+              Trusted
+            </span>
+
           </h1>
+
+
+          <h1 class="line">
+
+            <span
+              class="word"
+              style="transform: translateY(-75px);"
+            >
+
+              <span style="color: #1877F2;">S</span>
+
+              <span
+                style="
+                  background: linear-gradient(
+                    45deg,
+                    #FEDA75 0%,
+                    #FA7E1E 25%,
+                    #D62976 50%,
+                    #962FBF 75%,
+                    #4F5BD5 100%
+                  );
+                  -webkit-background-clip: text;
+                  background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  color: transparent;
+                "
+              >
+                o
+              </span>
+
+              <span
+                style="
+                  background: linear-gradient(
+                    45deg,
+                    #00B2FF 0%,
+                    #A033FF 50%,
+                    #FF5280 75%,
+                    #FF7061 100%
+                  );
+                  -webkit-background-clip: text;
+                  background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  color: transparent;
+                "
+              >
+                c
+              </span>
+
+              <span style="color: #25D366;">i</span>
+
+              <span style="color: #FE2C55;">a</span>
+
+              <span style="color: #FFFFFF;">l</span>
+
+            </span>
+
+
+            <span
+              class="word"
+              style="transform: translate(50px, -75px);"
+            >
+              Media
+            </span>
+
+
+            <span
+              class="word"
+              style="transform: translate(100px, -75px);"
+            >
+              Agency
+            </span>
+
+          </h1>
+
         </div>
+
       </div>
 
+
       <div class="gate">
+
         <div class="door left">
           <img src="logo.jpg" alt="Logo">
         </div>
+
         <div class="door right">
           <img src="logo.jpg" alt="Logo">
         </div>
+
       </div>
 
-      <div class="scroll-indicator" id="scrollIndicator">
-        <span>SCROLL</span>
-        <div class="scroll-arrow">↓</div>
+
+      <div
+        class="scroll-indicator"
+        id="scrollIndicator"
+      >
+
+        <span>
+          SCROLL
+        </span>
+
+        <div class="scroll-arrow">
+          ↓
+        </div>
+
       </div>
 
     </div>
+
   </section>
+
 
   <!-- ================================================================
        MAIN WEBSITE CONTENT
-       The glass nav above stays fixed and visible through this
-       section and any further sections you add below it.
        ================================================================ -->
-  <section class="main-content" id="mainContent">
+
+  <section
+    class="main-content"
+    id="mainContent"
+  >
+
     <div class="wwd">
-      <p class="wwd__label">What we do</p>
+
+      <p class="wwd__label">
+        What we do
+      </p>
+
       <h1 class="wwd__heading">
+
         We help you fixing your
+
         <span class="c-red">s</span><span class="c-blue">ocial media</span>
-        <span class="c-orange">account</span>
-        <span class="c-blue">Issues</span>
-        with low cost &<span class="c-red">100%</span>precesion
+
+        <span class="c-orange">
+          account
+        </span>
+
+        <span class="c-blue">
+          Issues
+        </span>
+
+        with low cost &
+
+        <span class="c-red">
+          100%
+        </span>
+
+        precesion
+
       </h1>
+
     </div>
-    <div style="display: flex; justify-content:space-between;height: 3rem; width: 80%;">
-        <img style="height: 3rem; width: 3rem;" src="facebook.png" alt="facebook logo">
-        <img style="height: 3rem; width: 3rem;" src="instagram.png" alt="instagram logo">
-        <img style="height: 3rem; width: 3rem;" src="whatsapp.png" alt="whatsapp logo">
-        <img style="height: 3rem; width: 3rem;" src="toktok.png" alt="tiktok logo">
-        <img style="height: 3rem; width: 3rem;" src="gmail.png" alt="tiktok logo">
+
+
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        height: 3rem;
+        width: 80%;
+      "
+    >
+
+      <img
+        style="height: 3rem; width: 3rem;"
+        src="facebook.png"
+        alt="facebook logo"
+      >
+
+      <img
+        style="height: 3rem; width: 3rem;"
+        src="instagram.png"
+        alt="instagram logo"
+      >
+
+      <img
+        style="height: 3rem; width: 3rem;"
+        src="whatsapp.png"
+        alt="whatsapp logo"
+      >
+
+      <img
+        style="height: 3rem; width: 3rem;"
+        src="toktok.png"
+        alt="tiktok logo"
+      >
+
+      <img
+        style="height: 3rem; width: 3rem;"
+        src="gmail.png"
+        alt="gmail logo"
+      >
+
     </div>
+
   </section>
 
-  <script>
-    const gateSection     = document.querySelector(".gate-section");
-    const leftDoor        = document.querySelector(".left");
-    const rightDoor       = document.querySelector(".right");
-    const scrollIndicator = document.querySelector("#scrollIndicator");
-    const mainContent     = document.querySelector("#mainContent");
-    const yourWordMain    = document.querySelector("#yourWordMain");
-    const yourWord        = document.querySelector("#yourWord");
-    const glassNav        = document.querySelector("#glassNav");
 
-    // "Your" position while closed vs. its resting point next to "Trusted"
+  <script>
+
+    const gateSection =
+      document.querySelector(".gate-section");
+
+    const leftDoor =
+      document.querySelector(".left");
+
+    const rightDoor =
+      document.querySelector(".right");
+
+    const scrollIndicator =
+      document.querySelector("#scrollIndicator");
+
+    const mainContent =
+      document.querySelector("#mainContent");
+
+    const yourWordMain =
+      document.querySelector("#yourWordMain");
+
+    const yourWord =
+      document.querySelector("#yourWord");
+
+    const glassNav =
+      document.querySelector("#glassNav");
+
+
+    // "Your" position while closed vs.
+    // its resting point next to "Trusted"
+
     const YOUR_START_X = -250;
-    const YOUR_END_X   = -200;
+
+    const YOUR_END_X = -200;
+
     const YOUR_FIXED_Y = -75;
 
-    // How far "Your" sits from "media" before the main section closes the gap
-    const MAIN_START_GAP = 60; // px
+
+    // How far "Your" sits from "media"
+    // before the main section closes the gap
+
+    const MAIN_START_GAP = 60;
+
 
     window.addEventListener("scroll", () => {
-      // ---- Gate open/close progress (0 = closed, 1 = fully open) ----
-      const rect = gateSection.getBoundingClientRect();
-      const scrollDistance = gateSection.offsetHeight - window.innerHeight;
-      const progress = clamp(-rect.top / scrollDistance, 0, 1);
 
-      const movement = progress * 100;
-      leftDoor.style.transform  = `translateX(-${movement}%)`;
-      rightDoor.style.transform = `translateX(${movement}%)`;
+      // ---- Gate open/close progress ----
 
-      // "Your" slides toward "Trusted" as the gate opens
-      const currentX = YOUR_START_X + (YOUR_END_X - YOUR_START_X) * progress;
-      yourWord.style.transform = `translate(${currentX}px, ${YOUR_FIXED_Y}px)`;
+      const rect =
+        gateSection.getBoundingClientRect();
+
+      const scrollDistance =
+        gateSection.offsetHeight -
+        window.innerHeight;
+
+      const progress =
+        clamp(
+          -rect.top / scrollDistance,
+          0,
+          1
+        );
+
+
+      const movement =
+        progress * 100;
+
+
+      leftDoor.style.transform =
+        `translateX(-${movement}%)`;
+
+      rightDoor.style.transform =
+        `translateX(${movement}%)`;
+
+
+      // "Your" slides toward "Trusted"
+
+      const currentX =
+        YOUR_START_X +
+        (YOUR_END_X - YOUR_START_X) *
+        progress;
+
+
+      yourWord.style.transform =
+        `translate(
+          ${currentX}px,
+          ${YOUR_FIXED_Y}px
+        )`;
+
 
       // Nav fades in once the gate has fully opened
-      glassNav.classList.toggle("visible", progress >= 1);
 
-      // ---- "Your" gap close on the main page (its own scroll progress) ----
-      const mainRect = mainContent.getBoundingClientRect();
-      const mainProgress = clamp(
-        (window.innerHeight - mainRect.top) / window.innerHeight,
-        0,
-        1
+      glassNav.classList.toggle(
+        "visible",
+        progress >= 1
       );
-      yourWordMain.style.marginRight = `${MAIN_START_GAP * (1 - mainProgress)}px`;
-    });
 
-    scrollIndicator.addEventListener("click", () => {
-      const startPosition  = window.scrollY;
-      const targetPosition = mainContent.getBoundingClientRect().top + window.scrollY;
-      const distance = targetPosition - startPosition;
-      const duration = 500;
-      let startTime = null;
 
-      function smoothScroll(currentTime) {
-        if (!startTime) startTime = currentTime;
+      // ---- "Your" gap close on main page ----
 
-        const elapsed = currentTime - startTime;
-        let t = Math.min(elapsed / duration, 1);
-        t = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // ease-in-out
+      const mainRect =
+        mainContent.getBoundingClientRect();
 
-        window.scrollTo(0, startPosition + distance * t);
 
-        if (t < 1) requestAnimationFrame(smoothScroll);
+      const mainProgress =
+        clamp(
+          (window.innerHeight - mainRect.top) /
+          window.innerHeight,
+          0,
+          1
+        );
+
+
+      if (yourWordMain) {
+
+        yourWordMain.style.marginRight =
+          `${MAIN_START_GAP *
+          (1 - mainProgress)}px`;
+
       }
 
-      requestAnimationFrame(smoothScroll);
     });
 
-    function clamp(value, min, max) {
-      return Math.min(Math.max(value, min), max);
+
+    scrollIndicator.addEventListener(
+      "click",
+      () => {
+
+        const startPosition =
+          window.scrollY;
+
+
+        const targetPosition =
+          mainContent.getBoundingClientRect().top +
+          window.scrollY;
+
+
+        const distance =
+          targetPosition -
+          startPosition;
+
+
+        const duration =
+          500;
+
+
+        let startTime =
+          null;
+
+
+        function smoothScroll(currentTime) {
+
+          if (!startTime)
+            startTime = currentTime;
+
+
+          const elapsed =
+            currentTime - startTime;
+
+
+          let t =
+            Math.min(
+              elapsed / duration,
+              1
+            );
+
+
+          t =
+            t < 0.5
+              ? 2 * t * t
+              : 1 -
+                Math.pow(
+                  -2 * t + 2,
+                  2
+                ) / 2;
+
+
+          window.scrollTo(
+            0,
+            startPosition +
+            distance * t
+          );
+
+
+          if (t < 1)
+            requestAnimationFrame(
+              smoothScroll
+            );
+
+        }
+
+
+        requestAnimationFrame(
+          smoothScroll
+        );
+
+      }
+    );
+
+
+    function clamp(
+      value,
+      min,
+      max
+    ) {
+
+      return Math.min(
+        Math.max(value, min),
+        max
+      );
+
     }
+
   </script>
 
 </body>
+
 </html>
